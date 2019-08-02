@@ -7,7 +7,7 @@ const {
   DeleteSingleTask
 } = require("../controllers/taskControllers");
 
-const router = express.Router();
+const router = new express.Router();
 
 // create a new task
 router.post("/create", CreateNewTask);

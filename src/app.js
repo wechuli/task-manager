@@ -30,8 +30,8 @@ mongoose
 
 //Custom routes
 
-app.use('/api/tasks',taskRoutes);
-app.use('/api/users',userRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/users", userRoutes);
 
 //404 default route
 
@@ -41,6 +41,6 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 8088;
 
-app.listen(PORT,() => {
+app.listen(PORT, () => {
   console.info(`The app is listening on port ${PORT}`);
 });

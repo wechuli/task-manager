@@ -7,7 +7,7 @@ const {
   DeleteSingleUser
 } = require("../controllers/userControllers");
 
-const router = express.Router();
+const router = new express.Router();
 
 // Create a new user
 router.post("/create", CreateNewUser);
