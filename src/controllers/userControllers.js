@@ -33,5 +33,36 @@ module.exports = {
     } catch (error) {
       res.status(400).json({ error: true, message: error });
     }
+  },
+  async UpdateSingleUser(req, res) {
+    //Make sure updates conform to a particular set of allowed objects
+
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ["name", "email", "password", "age"];
+
+    const isValidUpdateField = updates.every(update => {
+      return allowedUpdates.includes(update);
+    });
+
+    if (!isValidUpdateField) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Invalid update fields" });
+    }
+    const { id } = req.params;
+    try {
+      const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+        new: true,
+        runValidators: true
+      });
+      if (!updatedUser) {
+        return res
+          .status(404)
+          .json({ error: true, message: "User unavailable" });
+      }
+      res.status(200).json({ error: false, updatedUser });
+    } catch (error) {
+      res.status(400).json({ error: true, message: error });
+    }
   }
 };
