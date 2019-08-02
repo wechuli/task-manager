@@ -2,7 +2,9 @@ const express = require("express");
 const {
   CreateNewTask,
   GetAllTasks,
-  GetSingleTask
+  GetSingleTask,
+  UpdateSingleTask,
+  DeleteSingleTask
 } = require("../controllers/taskControllers");
 
 const router = express.Router();
@@ -16,5 +18,12 @@ router.get("/all", GetAllTasks);
 
 //get single task
 router.get("/single/:id", GetSingleTask);
+
+//update a single task
+router.patch("/single/:id", UpdateSingleTask);
+
+//delete a single task
+
+router.delete("/single/:id", DeleteSingleTask);
 
 module.exports = router;

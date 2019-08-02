@@ -3,7 +3,8 @@ const {
   CreateNewUser,
   GetAllUsers,
   GetSingleUser,
-  UpdateSingleUser
+  UpdateSingleUser,
+  DeleteSingleUser
 } = require("../controllers/userControllers");
 
 const router = express.Router();
@@ -20,6 +21,9 @@ router.get("/single/:id", GetSingleUser);
 
 //update an existing user
 
-router.patch("/single/:id",UpdateSingleUser);
+router.patch("/single/:id", UpdateSingleUser);
+
+//Delete a user
+router.delete("/single/:id", DeleteSingleUser);
 
 module.exports = router;

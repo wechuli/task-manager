@@ -64,5 +64,20 @@ module.exports = {
     } catch (error) {
       res.status(400).json({ error: true, message: error });
     }
+  },
+
+  async DeleteSingleUser(req, res) {
+    const { id } = req.params;
+    try {
+      const deletedUser = await User.findByIdAndDelete(id);
+      if (!deletedUser) {
+        return res
+          .status(404)
+          .json({ error: true, message: "User unavailable" });
+      }
+      res.status(200).json({ error: false, deletedUser });
+    } catch (error) {
+      res.status(500).json({ error: true, message: error });
+    }
   }
 };
