@@ -50,10 +50,18 @@ module.exports = {
     }
     const { id } = req.params;
     try {
-      const updatedTask = await Task.findByIdAndUpdate(id, req.body, {
-        new: true,
-        runValidators: true
+      const updatedTask = await Task.findById(id);
+
+      updates.forEach(update => {
+        updatedTask[update] = req.body[update];
       });
+
+      // const updatedTask = await Task.findByIdAndUpdate(id, req.body, {
+      //   new: true,
+      //   runValidators: true
+      // });
+
+      updatedTask.save();
       if (!updatedTask) {
         return res
           .status(404)

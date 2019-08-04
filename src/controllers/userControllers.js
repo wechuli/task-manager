@@ -1,4 +1,5 @@
 const User = require("../models/User.model");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   async CreateNewUser(req, res) {
@@ -51,10 +52,18 @@ module.exports = {
     }
     const { id } = req.params;
     try {
-      const updatedUser = await User.findByIdAndUpdate(id, req.body, {
-        new: true,
-        runValidators: true
+      // Instead of using findByIdAndUpdate we can just find the document and manually update it so our mongoose middleware would kick in
+      const updatedUser = await User.findById(id);
+
+      updates.forEach(update => {
+        updatedUser[update] = req.body[update];
       });
+      // const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      //   new: true,
+      //   runValidators: true
+      // });
+
+      await updatedUser.save();
       if (!updatedUser) {
         return res
           .status(404)
@@ -78,6 +87,18 @@ module.exports = {
       res.status(200).json({ error: false, deletedUser });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
+    }
+  },
+
+  async LoginUser(req, res) {
+    // we can add our own functions on the models we create by mongoose
+    const { email, password } = req.body;
+    try {
+      const user = await User.findByCredentials(email, password);
+      
+      res.status(200).json({ error: false, user });
+    } catch (error) {
+      res.status(400).json({ error: true, error });
     }
   }
 };
