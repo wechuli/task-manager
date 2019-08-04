@@ -6,9 +6,12 @@ module.exports = {
     try {
       const newUser = new User(req.body);
       await newUser.save();
+
+      //note - the generateAuthToken is on the specific document
+      const token = await newUser.generateAuthToken();
       res
         .status(201)
-        .json({ message: "new user created", newUser, error: false });
+        .json({ message: "new user created", newUser, token, error: false });
     } catch (error) {
       res.status(400).json({ error: true, message: error });
     }
@@ -93,12 +96,17 @@ module.exports = {
   async LoginUser(req, res) {
     // we can add our own functions on the models we create by mongoose
     const { email, password } = req.body;
+    console.log(req.body);
     try {
+      //note the findByCredentials method is on the Model/Collection since it involves searching through the whole collection
       const user = await User.findByCredentials(email, password);
-      
-      res.status(200).json({ error: false, user });
+
+      //note - the generateAuthToken is on the specific document
+      const token = await user.generateAuthToken();
+
+      res.status(200).json({ error: false, user, token });
     } catch (error) {
-      res.status(400).json({ error: true, error });
+      res.status(401).json({ error: true, error });
     }
   }
 };
