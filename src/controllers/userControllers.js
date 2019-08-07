@@ -108,5 +108,13 @@ module.exports = {
     } catch (error) {
       res.status(401).json({ error: true, error });
     }
+  },
+  async GetOwnProfile(req, res) {
+    const { user } = req;
+    try {
+      res.status(200).json({ error: false, user });
+    } catch (error) {
+      res.status(400).json({ error: true, message: error });
+    }
   }
 };

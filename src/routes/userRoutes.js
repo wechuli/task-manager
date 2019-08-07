@@ -1,11 +1,13 @@
 const express = require("express");
+const auth = require("../helpers/auth");
 const {
   CreateNewUser,
   GetAllUsers,
   GetSingleUser,
   UpdateSingleUser,
   DeleteSingleUser,
-  LoginUser
+  LoginUser,
+  GetOwnProfile
 } = require("../controllers/userControllers");
 
 const router = new express.Router();
@@ -15,10 +17,14 @@ router.post("/create", CreateNewUser);
 
 //login user
 
-router.post("/login",LoginUser);
+router.post("/login", LoginUser);
 
 //get all users in the db
-router.get("/all", GetAllUsers);
+router.get("/all", auth, GetAllUsers);
+
+// get your own profile
+
+router.get("/user/me",auth, GetOwnProfile);
 
 //Get a particular user in db
 
