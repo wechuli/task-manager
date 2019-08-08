@@ -116,5 +116,34 @@ module.exports = {
     } catch (error) {
       res.status(400).json({ error: true, message: error });
     }
+  },
+
+  async LogoutUser(req, res) {
+    try {
+      req.user.tokens = req.user.tokens.filter(token => {
+        return token.token !== req.token;
+      });
+
+      await req.user.save();
+
+      res
+        .status(200)
+        .json({ error: false, message: "User successfully logged out" });
+    } catch (error) {
+      res.status(500).json({ error: true, message: error });
+    }
+  },
+  async LogoutAllUsers(req, res) {
+    try {
+      req.user.tokens = [];
+      await req.user.save();
+      console.log(req.user);
+      res.status(200).json({
+        error: false,
+        message: "Successfully logged out of all sessions."
+      });
+    } catch (error) {
+      res.status(500).json({ error: true, message: error });
+    }
   }
 };
