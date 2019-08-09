@@ -38,7 +38,7 @@ module.exports = {
       res.status(400).json({ error: true, message: error });
     }
   },
-  async UpdateSingleUser(req, res) {
+  async UpdateOwnProfile(req, res) {
     //Make sure updates conform to a particular set of allowed objects
 
     const updates = Object.keys(req.body);
@@ -53,41 +53,45 @@ module.exports = {
         .status(400)
         .json({ error: true, message: "Invalid update fields" });
     }
-    const { id } = req.params;
+
     try {
-      // Instead of using findByIdAndUpdate we can just find the document and manually update it so our mongoose middleware would kick in
-      const updatedUser = await User.findById(id);
+      // // Instead of using findByIdAndUpdate we can just find the document and manually update it so our mongoose middleware would kick in
+      // const updatedUser = await User.findById(id);
+
+      // we have the user object on req.user from the authentication middleware
 
       updates.forEach(update => {
-        updatedUser[update] = req.body[update];
+        req.user[update] = req.body[update];
       });
       // const updatedUser = await User.findByIdAndUpdate(id, req.body, {
       //   new: true,
       //   runValidators: true
       // });
 
-      await updatedUser.save();
-      if (!updatedUser) {
-        return res
-          .status(404)
-          .json({ error: true, message: "User unavailable" });
-      }
-      res.status(200).json({ error: false, updatedUser });
+      await req.user.save();
+      // if (!updatedUser) {
+      //   return res
+      //     .status(404)
+      //     .json({ error: true, message: "User unavailable" });
+      // }
+      res.status(200).json({ error: false, updatedUser: req.user });
     } catch (error) {
       res.status(400).json({ error: true, message: error });
     }
   },
 
-  async DeleteSingleUser(req, res) {
-    const { id } = req.params;
+  async DeleteOwnProfile(req, res) {
+    // const { _id } = req.user;
     try {
-      const deletedUser = await User.findByIdAndDelete(id);
-      if (!deletedUser) {
-        return res
-          .status(404)
-          .json({ error: true, message: "User unavailable" });
-      }
-      res.status(200).json({ error: false, deletedUser });
+      // const deletedUser = await User.findByIdAndDelete(_id);
+      // if (!deletedUser) {
+      //   return res
+      //     .status(404)
+      //     .json({ error: true, message: "User unavailable" });
+      // }
+
+      await req.user.remove();
+      res.status(200).json({ error: false, deletedUser: req.user });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
     }

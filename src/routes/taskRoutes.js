@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../helpers/auth");
 const {
   CreateNewTask,
   GetAllTasks,
@@ -10,20 +11,20 @@ const {
 const router = new express.Router();
 
 // create a new task
-router.post("/create", CreateNewTask);
+router.post("/create", auth, CreateNewTask);
 
 //get all tasks
 
-router.get("/all", GetAllTasks);
+router.get("/all", auth, GetAllTasks);
 
 //get single task
-router.get("/single/:id", GetSingleTask);
+router.get("/single/:id", auth, GetSingleTask);
 
 //update a single task
-router.patch("/single/:id", UpdateSingleTask);
+router.patch("/single/:id", auth, UpdateSingleTask);
 
 //delete a single task
 
-router.delete("/single/:id", DeleteSingleTask);
+router.delete("/single/:id", auth, DeleteSingleTask);
 
 module.exports = router;

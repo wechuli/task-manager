@@ -2,8 +2,12 @@ const Task = require("../models/Task.model");
 
 module.exports = {
   async CreateNewTask(req, res) {
+    const { _id } = req.user;
     try {
-      const newTask = new Task(req.body);
+      const newTask = new Task({
+        ...req.body,
+        owner: _id
+      });
       await newTask.save();
       res
         .status(201)
@@ -13,17 +17,24 @@ module.exports = {
     }
   },
   async GetAllTasks(req, res) {
+    const { _id } = req.user;
     try {
-      const allTasks = await Task.find({});
+      const allTasks = await Task.find({ owner: _id });
+
+      // You could use below to do the same this - using the virtual property we created
+
+      // const tasksByUser = await req.user.populate("tasks").execPopulate();
       res.status(200).json({ error: false, tasks: allTasks });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
     }
   },
   async GetSingleTask(req, res) {
+    // get only the tasks authored by the logged in user
+
     const { id } = req.params;
     try {
-      const task = await Task.findById(id);
+      const task = await Task.findOne({ _id: id, owner: req.user._id });
       if (!task) {
         return res.status(404).json({ error: true, message: "Task not found" });
       }
@@ -50,7 +61,14 @@ module.exports = {
     }
     const { id } = req.params;
     try {
-      const updatedTask = await Task.findById(id);
+      //find the task if it owned by the logged in user
+      const updatedTask = await Task.findOne({ _id: id, owner: req.user._id });
+
+      if (!updatedTask) {
+        return res
+          .status(404)
+          .json({ error: true, message: "Task unavailable" });
+      }
 
       updates.forEach(update => {
         updatedTask[update] = req.body[update];
@@ -62,11 +80,6 @@ module.exports = {
       // });
 
       updatedTask.save();
-      if (!updatedTask) {
-        return res
-          .status(404)
-          .json({ error: true, message: "Task unavailable" });
-      }
       res.status(200).json({ error: false, updatedTask });
     } catch (error) {
       res.status(400).json({ error: true, message: error });
@@ -75,7 +88,10 @@ module.exports = {
   async DeleteSingleTask(req, res) {
     const { id } = req.params;
     try {
-      const deletedTask = await Task.findByIdAndDelete(id);
+      const deletedTask = await Task.findOneAndDelete({
+        _id: id,
+        owner: req.user._id
+      });
       if (!deletedTask) {
         return res
           .status(404)

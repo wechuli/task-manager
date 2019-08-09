@@ -4,8 +4,8 @@ const {
   CreateNewUser,
   GetAllUsers,
   GetSingleUser,
-  UpdateSingleUser,
-  DeleteSingleUser,
+  UpdateOwnProfile,
+  DeleteOwnProfile,
   LoginUser,
   GetOwnProfile,
   LogoutUser,
@@ -36,13 +36,13 @@ router.get("/user/me", auth, GetOwnProfile);
 
 //Get a particular user in db
 
-router.get("/single/:id", GetSingleUser);
+// router.get("/single/:id", GetSingleUser);
 
 //update an existing user
 
-router.patch("/single/:id", UpdateSingleUser);
+router.patch("/user/me",auth, UpdateOwnProfile);
 
 //Delete a user
-router.delete("/single/:id", DeleteSingleUser);
+router.delete("/user/me", auth, DeleteOwnProfile);
 
 module.exports = router;
