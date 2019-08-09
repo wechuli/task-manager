@@ -13,7 +13,7 @@ const router = new express.Router();
 // create a new task
 router.post("/create", auth, CreateNewTask);
 
-//get all tasks
+//get all tasks ?completed=true
 
 router.get("/all", auth, GetAllTasks);
 

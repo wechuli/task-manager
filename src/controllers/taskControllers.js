@@ -18,12 +18,29 @@ module.exports = {
   },
   async GetAllTasks(req, res) {
     const { _id } = req.user;
+    const match = {};
+
+    if (req.query.completed) {
+      match.completed = req.query.completed === "true";
+    }
+
+    console.log(match);
     try {
-      const allTasks = await Task.find({ owner: _id });
+      let allTasks;
+      if (req.query.completed) {
+        allTasks = await Task.find({ owner: _id, completed: match.completed });
+      } else {
+        allTasks = await Task.find({ owner: _id });
+      }
 
       // You could use below to do the same this - using the virtual property we created
 
-      // const tasksByUser = await req.user.populate("tasks").execPopulate();
+      //       // const tasksByUser = await req.user.populate({
+      // path:'tasks',
+      // match:{
+      //   completed:false
+      // }
+      //       // }).execPopulate();
       res.status(200).json({ error: false, tasks: allTasks });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
