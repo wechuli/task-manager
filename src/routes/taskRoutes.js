@@ -14,6 +14,7 @@ const router = new express.Router();
 router.post("/create", auth, CreateNewTask);
 
 //get all tasks ?completed=true
+// limit=10, skip=0
 
 router.get("/all", auth, GetAllTasks);
 

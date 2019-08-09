@@ -26,22 +26,26 @@ module.exports = {
 
     console.log(match);
     try {
-      let allTasks;
-      if (req.query.completed) {
-        allTasks = await Task.find({ owner: _id, completed: match.completed });
-      } else {
-        allTasks = await Task.find({ owner: _id });
-      }
+      // let allTasks;
+      // if (req.query.completed) {
+      //   allTasks = await Task.find({ owner: _id, completed: match.completed });
+      // } else {
+      //   allTasks = await Task.find({ owner: _id });
+      // }
 
       // You could use below to do the same this - using the virtual property we created
 
-      //       // const tasksByUser = await req.user.populate({
-      // path:'tasks',
-      // match:{
-      //   completed:false
-      // }
-      //       // }).execPopulate();
-      res.status(200).json({ error: false, tasks: allTasks });
+      await req.user
+        .populate({
+          path: "tasks",
+          match,
+          options: {
+            limit: parseInt(req.query.limit),
+            skip: parseInt(req.query.skip)
+          }
+        })
+        .execPopulate();
+      res.status(200).json({ error: false, tasks: req.user.tasks });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
     }
