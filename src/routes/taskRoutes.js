@@ -15,6 +15,7 @@ router.post("/create", auth, CreateNewTask);
 
 //get all tasks ?completed=true
 // limit=10, skip=0
+// sortBy=createdAt_asc/createdAt_desc
 
 router.get("/all", auth, GetAllTasks);
 

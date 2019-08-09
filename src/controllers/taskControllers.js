@@ -19,9 +19,14 @@ module.exports = {
   async GetAllTasks(req, res) {
     const { _id } = req.user;
     const match = {};
+    const sort = {};
 
     if (req.query.completed) {
       match.completed = req.query.completed === "true";
+    }
+    if (req.query.sortBy) {
+      const parts = req.query.sortBy.split(":");
+      sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
     }
 
     console.log(match);
@@ -41,7 +46,8 @@ module.exports = {
           match,
           options: {
             limit: parseInt(req.query.limit),
-            skip: parseInt(req.query.skip)
+            skip: parseInt(req.query.skip),
+            sort
           }
         })
         .execPopulate();
