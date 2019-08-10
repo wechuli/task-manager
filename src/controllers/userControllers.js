@@ -149,5 +149,15 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ error: true, message: error });
     }
+  },
+
+  async UploadProfilePic(req, res) {
+    try {
+      res
+        .status(200)
+        .json({ error: false, message: "Avatar successfully uploaded" });
+    } catch (error) {
+      res.status(500).json({ error: true, message: error });
+    }
   }
 };
