@@ -1,5 +1,6 @@
 const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
+const { formatAvatarPhoto } = require("../helpers/imageFormatter");
 
 module.exports = {
   async CreateNewUser(req, res) {
@@ -153,8 +154,8 @@ module.exports = {
 
   async UploadProfilePic(req, res) {
     try {
-      req.user.avatar = req.file.buffer;
-
+      // req.user.avatar = req.file.buffer;
+      req.user.avatar = await formatAvatarPhoto(req.file.buffer);
       await req.user.save();
       res
         .status(200)
@@ -183,7 +184,7 @@ module.exports = {
       if (!user || !user.avatar) {
         throw new Error();
       }
-      res.set("Content-Type", "image/jpg");
+      res.set("Content-Type", "image/png");
       res.send(user.avatar);
     } catch (error) {
       res.status(404).json({ error: true, message: error });

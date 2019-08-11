@@ -1,7 +1,7 @@
 const express = require("express");
 const auth = require("../helpers/auth");
 const upload = require("../helpers/fileUploads");
-
+const sharp = require("sharp");
 const multer = require("multer");
 const {
   CreateNewUser,
@@ -19,6 +19,7 @@ const {
 } = require("../controllers/userControllers");
 
 const router = new express.Router();
+
 
 // Create a new user
 router.post("/create", CreateNewUser);
