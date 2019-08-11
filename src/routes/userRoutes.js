@@ -13,7 +13,9 @@ const {
   GetOwnProfile,
   LogoutUser,
   LogoutAllUsers,
-  UploadProfilePic
+  UploadProfilePic,
+  DeleteAvatar,
+  GetAvatarById
 } = require("../controllers/userControllers");
 
 const router = new express.Router();
@@ -50,6 +52,13 @@ router.post(
   }
 );
 
+//get avatar
+
+router.get("/user/:id/avatar", GetAvatarById);
+
+//Delete avatar
+
+router.delete("/user/me/avatar", auth, DeleteAvatar);
 //Get a particular user in db
 
 // router.get("/single/:id", GetSingleUser);

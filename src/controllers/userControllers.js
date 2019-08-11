@@ -153,11 +153,40 @@ module.exports = {
 
   async UploadProfilePic(req, res) {
     try {
+      req.user.avatar = req.file.buffer;
+
+      await req.user.save();
       res
         .status(200)
         .json({ error: false, message: "Avatar successfully uploaded" });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
+    }
+  },
+  async DeleteAvatar(req, res) {
+    try {
+      req.user.avatar = undefined;
+      req.user.save();
+
+      res
+        .status(200)
+        .json({ error: false, message: "Image successfully deleted" });
+    } catch (error) {
+      res.status(500).json({ error: true, message: error });
+    }
+  },
+  async GetAvatarById(req, res) {
+    const { id } = req.params;
+    try {
+      const user = await User.findById(id);
+
+      if (!user || !user.avatar) {
+        throw new Error();
+      }
+      res.set("Content-Type", "image/jpg");
+      res.send(user.avatar);
+    } catch (error) {
+      res.status(404).json({ error: true, message: error });
     }
   }
 };
