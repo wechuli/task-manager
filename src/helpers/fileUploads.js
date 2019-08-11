@@ -4,6 +4,7 @@ const multer = require("multer");
 //if the dest is not setup, tmulter will pass the binary to an object in the next route handler
 const upload = multer({
 //   dest: "avatars",
+
   limits: {
     fileSize: 1000000
   },
