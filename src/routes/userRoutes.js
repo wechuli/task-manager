@@ -1,5 +1,6 @@
 const express = require("express");
 const auth = require("../helpers/auth");
+const upload = require("../helpers/fileUploads");
 
 const multer = require("multer");
 const {
@@ -16,18 +17,6 @@ const {
 } = require("../controllers/userControllers");
 
 const router = new express.Router();
-
-//setup multer
-
-const upload = multer({
-  dest: "avatars",
-  limits: {
-    fileSize: 1000000
-  },
-  fileFilter(){
-    
-  }
-});
 
 // Create a new user
 router.post("/create", CreateNewUser);
@@ -49,9 +38,17 @@ router.get("/all", auth, GetAllUsers);
 
 router.get("/user/me", auth, GetOwnProfile);
 
-//upload profile pic in datbase
+//upload profile pic in datbase - we can provide a 4th callback to handle any errors from the file upload
 
-router.post("/user/me/avatar", auth, upload.single("avatar"), UploadProfilePic);
+router.post(
+  "/user/me/avatar",
+  auth,
+  upload.single("avatar"),
+  UploadProfilePic,
+  (error, req, res, next) => {
+    res.status(400).json({ error: true, message: error.message });
+  }
+);
 
 //Get a particular user in db
 
