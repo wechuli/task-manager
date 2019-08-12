@@ -1,12 +1,17 @@
 const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
 const { formatAvatarPhoto } = require("../helpers/imageFormatter");
+const {
+  sendWelcomeEmail,
+  sendCancellationEmail
+} = require("../helpers/emails");
 
 module.exports = {
   async CreateNewUser(req, res) {
     try {
       const newUser = new User(req.body);
       await newUser.save();
+      sendWelcomeEmail({ email: newUser.email, name: newUser.name });
 
       //note - the generateAuthToken is on the specific document
       const token = await newUser.generateAuthToken();
@@ -92,6 +97,7 @@ module.exports = {
       // }
 
       await req.user.remove();
+      sendCancellationEmail({ email: req.user.email, name: req.user.name });
       res.status(200).json({ error: false, deletedUser: req.user });
     } catch (error) {
       res.status(500).json({ error: true, message: error });
