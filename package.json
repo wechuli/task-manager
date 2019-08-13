@@ -5,7 +5,8 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "env-cmd -f ./config/dev.env nodemon src/app.js"
+    "dev": "env-cmd -f ./config/dev.env nodemon src/app.js",
+    "test": "jest"
   },
   "repository": "https://github.com/wechuli/task-manager.git",
   "author": "Wechuli <wechulipaul@yahoo.com>",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "env-cmd": "^9.0.3",
+    "jest": "^24.8.0",
     "nodemon": "^1.19.1"
   }
 }
