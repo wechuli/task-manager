@@ -10,8 +10,6 @@ const taskRoutes = require("./routes/taskRoutes"),
 
 const app = express();
 
-
-
 //middleware
 app.use(cors());
 app.use(helmet());
@@ -19,11 +17,13 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+console.log(process.env.MONGO_URI);
 //connect to DB
 mongoose
   .connect(process.env.MONGO_URI, {
     useCreateIndex: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.info("Database successfully connected");
@@ -40,9 +40,4 @@ app.use("/api/users", userRoutes);
 app.use((req, res) => {
   res.status(404).json({ error: true, message: "Route unavailable" });
 });
-
-const PORT = process.env.PORT || 8088;
-
-app.listen(PORT, () => {
-  console.info(`The app is listening on port ${PORT}`);
-});
+module.exports = app;

@@ -19,6 +19,7 @@ module.exports = {
         .status(201)
         .json({ message: "new user created", newUser, token, error: false });
     } catch (error) {
+      // console.log(error);
       res.status(400).json({ error: true, message: error });
     }
   },
