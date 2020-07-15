@@ -9,4 +9,8 @@
 - Delete DELETE/tasks/:id
 
 ### Users
+- Create
+- Read
+- Read
+
 
