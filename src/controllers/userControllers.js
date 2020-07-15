@@ -1,4 +1,5 @@
 const User = require("../models/User.model");
+
 const bcrypt = require("bcryptjs");
 const { formatAvatarPhoto } = require("../helpers/imageFormatter");
 const {

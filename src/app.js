@@ -1,5 +1,5 @@
 const express = require("express"),
-  cors = require("cors"),
+ const cors = require("cors"),
   morgan = require("morgan"),
   mongoose = require("mongoose"),
   helmet = require("helmet");
