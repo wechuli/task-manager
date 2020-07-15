@@ -12,5 +12,5 @@
 - Create
 - Read
 - Read
-
+- Delete
 
