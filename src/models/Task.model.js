@@ -5,6 +5,7 @@ const taskSchema = new Schema(
     description: {
       type: String,
       required: true,
+      maxlength:100,
       trim: true
     },
     completed: {
